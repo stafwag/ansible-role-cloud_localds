@@ -1,0 +1,95 @@
+---
+- name: display the cloud_localds
+  debug:
+    msg:
+      - 'cloud_localds: {{ cloud_localds }}'
+
+- name: fail if dest and hostname are not defined
+  fail:
+    msg:
+      - "Sorry, I can't help without dest or a hostname."
+  when:
+    - cloud_localds.dest is not defined
+    - cloud_localds.hostname is not defined
+
+- name: set _cloud_localds_dir to default
+  set_fact:
+    _cloud_localds_dir: "{{ _default_cloud_localds_dir }}"
+  when: cloud_localds.dir is not defined
+
+- name: use the dest location
+  block:
+    - name: set _cloudinit_iso
+      set_fact:
+        _cloudinit_iso:
+          "{{ cloud_localds.dest }}"
+    - name: set _cloudinit_config
+      set_fact:
+        _cloudinit_config_yml:
+          "{{ cloud_localds.dest }}_config.yml"
+    - name: set _cloudinit_net_config
+      set_fact:
+        _cloudinit_net_config_yml:
+          "{{ cloud_localds.dest }}_net_config.yml"
+  when:
+    cloud_localds.dest is defined
+
+- name: use the hostname location
+  block:
+    - name: set _cloudinit_iso
+      set_fact:
+        _cloudinit_iso:
+          "{{ _cloud_localds_dir }}/{{ cloud_localds.hostname }}_cloudinit.iso"
+    - name: set _cloudinit_config
+      set_fact:
+        _cloudinit_config_yml:
+          "{{ _cloud_localds_dir }}/{{ cloud_localds.hostname }}_config.yml"
+    - name: set _cloudinit_net_config
+      set_fact:
+        _cloudinit_net_config_yml:
+          "{{ _cloud_localds_dir }}/{{ cloud_localds.hostname }}_net_config.yml"
+  when:
+    cloud_localds.dest is not defined
+
+- name: Create config.yml
+  copy:
+    dest: "{{ _cloudinit_config_yml }}"
+    content: "{{ cloud_localds.config }}"
+    owner: "{{ cloud_localds.owner | default('0') }}"
+    group: "{{ cloud_localds.group | default('0') }}"
+    mode: "{{ cloud_localds.mode | default('0400') }}"
+
+- name: Create net_config.yml
+  copy:
+    dest: "{{ _cloudinit_net_config_yml }}"
+    content: "{{ cloud_localds.network_config }}"
+    owner: "{{ cloud_localds.owner | default('0') }}"
+    group: "{{ cloud_localds.group | default('0') }}"
+    mode: "{{ cloud_localds.mode | default('0400') }}"
+  when: cloud_localds.network_config is defined
+
+- name: set cmd
+  set_fact:
+    _cloud_localds_cmd:
+      "cloud-localds {{ _cloudinit_iso  }} {{ _cloudinit_config_yml }}"
+
+- name: set cmd
+  set_fact:
+    _cloud_localds_cmd:
+      "{{ _cloud_localds_cmd }} --network-config {{ _cloudinit_net_config_yml }}"
+  when: cloud_localds.network_config is defined
+
+- name: run cloud-localds
+  command:
+    '{{ _cloud_localds_cmd }}'
+  register:
+    cloud_localds_result
+  changed_when:
+    cloud_localds_result.rc == 0
+
+- name: "Update file permissions"
+  file:
+    path: '{{ _cloudinit_iso }}'
+    owner: "{{ cloud_localds.owner | default('0') }}"
+    group: "{{ cloud_localds.group | default('0') }}"
+    mode: "{{ cloud_localds.mode | default('0400') }}"
