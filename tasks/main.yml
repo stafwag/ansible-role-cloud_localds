@@ -3,6 +3,22 @@
   debug:
     msg:
       - 'cloud_localds: {{ cloud_localds }}'
+  tags:
+    - never
+    - debug
+
+- name: install OS related packages
+  include_tasks: '{{ install_ssh }}'
+  with_first_found:
+    - 'install/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
+    - 'install/{{ ansible_distribution }}.yml'
+    - 'install/{{ ansible_os_family }}.yml'
+    - 'install/{{ ansible_os_family | replace ("/","_") | replace(" ","_") }}.yml'
+    - install/defaults.yml
+  loop_control:
+    loop_var: install_ssh
+  tags:
+    - install
 
 - name: fail if dest and hostname are not defined
   fail:
@@ -79,9 +95,17 @@
       "{{ _cloud_localds_cmd }} --network-config {{ _cloudinit_net_config_yml }}"
   when: cloud_localds.network_config is defined
 
+- name: DEBUG
+  debug:
+    msg:
+      - "DEBUG: _cloud_localds_cmd: {{ _cloud_localds_cmd }}"
+  tags:
+    - never
+    - debug
+
 - name: run cloud-localds
   command:
-    '{{ _cloud_localds_cmd }}'
+    '{{ _cloud_localds_cmd }}' 
   register:
     cloud_localds_result
   changed_when:
