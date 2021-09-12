@@ -18,7 +18,7 @@ cloud-localds
   * **config**: The user-data configuration
   * **network_config** The network configuration
   * **config_template:** Use an ansible template for the user-data configuration. 
-  * **network_config_template:** Usa an ansible template for the network configuration.
+  * **network_config_template:** Use an ansible template for the network configuration.
   * **owner**: uid default 0  The file owner of the destination image
   * **group**: gid default 0  The file group owner of the destination image 
   * **mode**:  mode default '0400'  The permissions of the destination image
