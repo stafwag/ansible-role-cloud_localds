@@ -16,7 +16,9 @@ cloud-localds
   * **hostname**:  The hostname
   * **dir**: optional default: ```/var/lib/libvirt/images```. The destination directory when **dest** is not defined.
   * **config**: The user-data configuration
-  * **network_config**: The network configuration
+  * **network_config** The network configuration
+  * **config_template:** Use an ansible template for the user-data configuration. 
+  * **network_config_template:** Usa an ansible template for the network configuration.
   * **owner**: uid default 0  The file owner of the destination image
   * **group**: gid default 0  The file group owner of the destination image 
   * **mode**:  mode default '0400'  The permissions of the destination image
@@ -72,6 +74,23 @@ None
           hostname: tstdebian 
           config: "{{ lookup('template','files/mytstdebian.j2') }}"
           network_config: "{{ lookup('template','files/mytstdebian.j2') }}"
+```
+
+### Use ansible templates 
+
+```
+---
+- name: Create config.iso
+  gather_facts: true 
+  become: true
+  hosts: localhost
+  roles:
+    - role: stafwag.cloud_localds
+      vars:
+        cloud_localds:
+          hostname: tstdebian 
+          config_template: "files/debian/debian.j2"
+          network_config_template: "files/debian/debian.j2"
 ```
 
 ## License

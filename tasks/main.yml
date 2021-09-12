@@ -1,5 +1,5 @@
 ---
-- name: display the cloud_localds
+- name: Display the cloud_localds variable
   debug:
     msg:
       - 'cloud_localds: {{ cloud_localds }}'
@@ -27,6 +27,24 @@
   when:
     - cloud_localds.dest is not defined
     - cloud_localds.hostname is not defined
+
+- name: fail when config and config_template are defined
+  fail:
+    msg:
+      - "Sorry, make up your mind."
+      - "Use config or config_template"
+  when:
+    - cloud_localds.config is defined
+    - cloud_localds.config_template is defined
+
+- name: fail when network_config and network_config_template are defined
+  fail:
+    msg:
+      - "Sorry, make up your mind."
+      - "Use network_config or network_config_template"
+  when:
+    - cloud_localds.network_config is defined
+    - cloud_localds.network_config_template is defined
 
 - name: set _cloud_localds_dir to default
   set_fact:
@@ -67,15 +85,17 @@
   when:
     cloud_localds.dest is not defined
 
-- name: Create config.yml
+# Create configs based on config
+- name: Create config.yml based on cloud_localds.config
   copy:
     dest: "{{ _cloudinit_config_yml }}"
     content: "{{ cloud_localds.config }}"
     owner: "{{ cloud_localds.owner | default('0') }}"
     group: "{{ cloud_localds.group | default('0') }}"
     mode: "{{ cloud_localds.mode | default('0400') }}"
+  when: cloud_localds.config is defined
 
-- name: Create net_config.yml
+- name: Create net_config.yml based on cloud_localcs.network_config
   copy:
     dest: "{{ _cloudinit_net_config_yml }}"
     content: "{{ cloud_localds.network_config }}"
@@ -84,6 +104,26 @@
     mode: "{{ cloud_localds.mode | default('0400') }}"
   when: cloud_localds.network_config is defined
 
+# Create config based on the templates
+- name: Create config.yml based cloud_localds.config_template
+  template:
+    src: "{{ cloud_localds.config_template }}"
+    dest: "{{ _cloudinit_config_yml }}"
+    owner: "{{ cloud_localds.owner | default('0') }}"
+    group: "{{ cloud_localds.group | default('0') }}"
+    mode: "{{ cloud_localds.mode | default('0400') }}"
+  when: cloud_localds.config_template is defined
+
+- name: Create net_config.yml based on cloud_localcs.network_config
+  copy:
+    src: "{{ cloud_localds.network_config_template }}"
+    dest: "{{ _cloudinit_net_config_yml }}"
+    owner: "{{ cloud_localds.owner | default('0') }}"
+    group: "{{ cloud_localds.group | default('0') }}"
+    mode: "{{ cloud_localds.mode | default('0400') }}"
+  when: cloud_localds.network_config_template is defined
+
+# Creat the command
 - name: set cmd
   set_fact:
     _cloud_localds_cmd:
