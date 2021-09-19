@@ -22,6 +22,7 @@ cloud-localds
   * **owner**: uid default 0  The file owner of the destination image
   * **group**: gid default 0  The file group owner of the destination image 
   * **mode**:  mode default '0400'  The permissions of the destination image
+  * **overwrite**: boolean default: false Overwrite destination iso if already exists.
 
 The role creates an iso disk image with the cloud-init configuration
 When  ```cloud_localds.dest``` is defined the following files are created:

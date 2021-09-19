@@ -85,6 +85,19 @@
   when:
     cloud_localds.dest is not defined
 
+- name: Verify if _cloudinit_iso already exists
+  stat:
+    path: "{{ _cloudinit_iso }}"
+  register:
+    _cloudinit_iso_file
+
+- name: Fail if dest already exists
+  fail:
+    msg: "Sorry, {{ _cloudinit_iso }} already exists"
+  when:
+    - _cloudinit_iso_file.stat.exists
+    - not cloud_localds.overwrite|default(false)
+
 # Create configs based on config
 - name: Create config.yml based on cloud_localds.config
   copy:
