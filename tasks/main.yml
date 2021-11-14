@@ -19,6 +19,10 @@
     loop_var: install_ssh
   tags:
     - install
+  when:
+    - ansible_distribution is defined
+    - ansible_os_family is defined
+    - ansible_distribution_major_version is defined
 
 - name: fail if dest and hostname are not defined
   fail:
@@ -108,7 +112,7 @@
     mode: "{{ cloud_localds.mode | default('0400') }}"
   when: cloud_localds.config is defined
 
-- name: Create net_config.yml based on cloud_localcs.network_config
+- name: Create net_config.yml based on cloud_localds.network_config
   copy:
     dest: "{{ _cloudinit_net_config_yml }}"
     content: "{{ cloud_localds.network_config }}"
@@ -127,7 +131,7 @@
     mode: "{{ cloud_localds.mode | default('0400') }}"
   when: cloud_localds.config_template is defined
 
-- name: Create net_config.yml based on cloud_localcs.network_config
+- name: Create net_config.yml based on cloud_localds.network_config
   copy:
     src: "{{ cloud_localds.network_config_template }}"
     dest: "{{ _cloudinit_net_config_yml }}"
