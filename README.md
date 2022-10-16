@@ -44,6 +44,20 @@ None
 
 ## Example Playbooks
 
+### Only install the loud image util package
+
+```
+---
+- name: Install the cloud image util package
+  gather_facts: true 
+  become: true
+  hosts: kvm_hosts
+  tasks:
+    - include_role:
+        name: stafwag.cloud_localds
+        tasks_from: install
+```
+
 ### Create a cloud-init iso with the dest defined
  
 ```

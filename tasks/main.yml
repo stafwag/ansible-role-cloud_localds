@@ -7,24 +7,12 @@
     - never
     - debug
 
-- name: install OS related packages
-  include_tasks: '{{ install_ssh }}'
-  with_first_found:
-    - 'install/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
-    - 'install/{{ ansible_distribution }}.yml'
-    - 'install/{{ ansible_os_family }}.yml'
-    - 'install/{{ ansible_os_family | replace ("/","_") | replace(" ","_") }}.yml'
-    - install/defaults.yml
-  loop_control:
-    loop_var: install_ssh
+- name: Install the cloud image util package
+  include_tasks: install.yml
   tags:
     - install
-  when:
-    - ansible_distribution is defined
-    - ansible_os_family is defined
-    - ansible_distribution_major_version is defined
 
-- name: fail if dest and hostname are not defined
+- name: Fail if dest and hostname are not defined
   fail:
     msg:
       - "Sorry, I can't help without dest or a hostname."
@@ -32,7 +20,7 @@
     - cloud_localds.dest is not defined
     - cloud_localds.hostname is not defined
 
-- name: fail when config and config_template are defined
+- name: Fail when config and config_template are defined
   fail:
     msg:
       - "Sorry, make up your mind."
@@ -41,7 +29,7 @@
     - cloud_localds.config is defined
     - cloud_localds.config_template is defined
 
-- name: fail when network_config and network_config_template are defined
+- name: Fail when network_config and network_config_template are defined
   fail:
     msg:
       - "Sorry, make up your mind."
@@ -50,12 +38,12 @@
     - cloud_localds.network_config is defined
     - cloud_localds.network_config_template is defined
 
-- name: set _cloud_localds_dir to default
+- name: Set _cloud_localds_dir to default
   set_fact:
     _cloud_localds_dir: "{{ _default_cloud_localds_dir }}"
   when: cloud_localds.dir is not defined
 
-- name: use the dest location
+- name: Use the dest location
   block:
     - name: set _cloudinit_iso
       set_fact:
@@ -72,7 +60,7 @@
   when:
     cloud_localds.dest is defined
 
-- name: use the hostname location
+- name: Use the hostname location
   block:
     - name: set _cloudinit_iso
       set_fact:
@@ -141,12 +129,12 @@
   when: cloud_localds.network_config_template is defined
 
 # Creat the command
-- name: set cmd
+- name: Set cmd
   set_fact:
     _cloud_localds_cmd:
       "cloud-localds {{ _cloudinit_iso  }} {{ _cloudinit_config_yml }}"
 
-- name: set cmd
+- name: Set cmd
   set_fact:
     _cloud_localds_cmd:
       "{{ _cloud_localds_cmd }} --network-config {{ _cloudinit_net_config_yml }}"
@@ -160,7 +148,7 @@
     - never
     - debug
 
-- name: run cloud-localds
+- name: Run cloud-localds
   command:
     '{{ _cloud_localds_cmd }}' 
   register:
