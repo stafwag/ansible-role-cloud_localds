@@ -120,7 +120,7 @@
   when: cloud_localds.config_template is defined
 
 - name: Create net_config.yml based on cloud_localds.network_config
-  copy:
+  template:
     src: "{{ cloud_localds.network_config_template }}"
     dest: "{{ _cloudinit_net_config_yml }}"
     owner: "{{ cloud_localds.owner | default('0') }}"
