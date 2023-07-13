@@ -70,7 +70,7 @@ defined. In this case, the following files will be created:
 
 ## Example Playbooks
 
-### Install the cloud-loclds package with include_role
+### Install the cloud-localds package with include_role
 
 ```bash
 ---
