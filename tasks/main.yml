@@ -2,7 +2,7 @@
 - name: Display the cloud_localds variable
   debug:
     msg:
-      - 'cloud_localds: {{ cloud_localds }}'
+      - "cloud_localds: {{ cloud_localds }}"
   tags:
     - never
     - debug
@@ -134,11 +134,13 @@
     _cloud_localds_cmd:
       "cloud-localds {{ _cloudinit_iso  }} {{ _cloudinit_config_yml }}"
 
-- name: Set cmd
+- name: Add network-config to cmd
   set_fact:
     _cloud_localds_cmd:
       "{{ _cloud_localds_cmd }} --network-config {{ _cloudinit_net_config_yml }}"
-  when: cloud_localds.network_config is defined
+  when: >
+    ( cloud_localds.network_config is defined ) or
+    ( cloud_localds.network_config_template is defined )
 
 - name: DEBUG
   debug:
@@ -150,7 +152,7 @@
 
 - name: Run cloud-localds
   command:
-    '{{ _cloud_localds_cmd }}' 
+    "{{ _cloud_localds_cmd }}" 
   register:
     cloud_localds_result
   changed_when:
@@ -158,7 +160,7 @@
 
 - name: "Update file permissions"
   file:
-    path: '{{ _cloudinit_iso }}'
+    path: "{{ _cloudinit_iso }}"
     owner: "{{ cloud_localds.owner | default('0') }}"
     group: "{{ cloud_localds.group | default('0') }}"
     mode: "{{ cloud_localds.mode | default('0400') }}"

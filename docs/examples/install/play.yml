@@ -1,0 +1,15 @@
+---
+- name: Install cloud_localds
+  gather_facts: true 
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Install the requirements
+      include_role:
+        name: "{{ item }}"
+        tasks_from:
+          install
+      with_items:
+        - stafwag.cloud_localds
+      tags:
+        - install

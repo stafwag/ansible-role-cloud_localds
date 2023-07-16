@@ -1,0 +1,10 @@
+#cloud-config
+system_info:
+  package_upgrade: true
+  default_user:
+    name: <your_user>
+    groups: wheel
+    lock_passwd: false
+    password: your_secure_pw
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']

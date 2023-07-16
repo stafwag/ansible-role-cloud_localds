@@ -1,0 +1,13 @@
+---
+- name: Create config.iso
+  gather_facts: no 
+  become: true
+  hosts: localhost
+  roles:
+    - role: stafwag.cloud_localds
+      vars:
+        cloud_localds:
+          dest: /var/lib/libvirt/images/tst_cloudinit.iso
+          config: "{{ lookup('file','files/tst_user-data.yml') }}"
+          network_config: "{{ lookup('file','files/tst_netconfig.yml') }}"
+          overwrite: yes

@@ -1,0 +1,31 @@
+---
+- name: Create config.iso
+  gather_facts: no 
+  become: true
+  hosts: localhost
+  roles:
+    - role: stafwag.cloud_localds
+      vars:
+        cloud_localds:
+          dest: /var/lib/libvirt/images/tst_cloudinit.iso
+          config_template: "templates/tst_user-data.j2"
+          network_config_template: "templates/tst_netconfig.j2"
+          overwrite: yes
+          cloud_config:
+            system_info:
+              default_user:
+                name: ansible
+                ssh_authorized_keys:
+                  - "{{lookup('file', '~/.ssh/ansible_ssh_key.pub') }}"
+            network:
+              dns_nameservers:
+                9.9.9.9
+              dns_search:
+                intern.local
+              interface:
+                name:
+                  enp1s0
+                address:
+                  192.168.123.3
+                gateway:
+                  192.168.123.1
