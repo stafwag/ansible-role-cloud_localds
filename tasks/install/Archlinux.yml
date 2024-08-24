@@ -1,5 +1,0 @@
----
-- name: Install the cloud-image-utils package
-  pacman:
-    name: cloud-image-utils
-    state: present
