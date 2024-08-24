@@ -1,5 +1,3 @@
 ---
-- name: Install the cloud-image-utils package
-  apt:
-    name: cloud-image-utils
-    state: present
+_packages_to_install:
+  - cloud-image-utils

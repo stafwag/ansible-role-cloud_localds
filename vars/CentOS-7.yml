@@ -1,5 +1,3 @@
 ---
-- name: Install the cloud-utils package
-  yum:
-    name: cloud-utils
-    state: present
+_packages_to_install:
+  - cloud-utils
