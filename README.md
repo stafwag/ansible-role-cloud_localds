@@ -5,7 +5,7 @@ This role is a wrapper around the ```cloud-localds``` command.
 
 ## Requirements
 
-cloud-localds
+```cloud-localds```
 
 ### Supported GNU/Linux Distributions
 
@@ -19,6 +19,30 @@ to use the role on Centos/RedHat 8.
 * Centos 7
 * RedHat 7
 * Ubuntu
+
+### Installation
+
+#### Ansible galaxy
+
+The role is available on [Ansible Galaxy](https://galaxy.ansible.com/ui/standalone/roles/stafwag/cloud_localds/).
+
+To install the role from Ansible Galaxy execute the command below.
+
+```bash
+$ ansible-galaxy role install stafwag.cloud_localds
+```
+
+## Source Code
+
+If you want to use the source code directly.
+
+Clone the role source code.
+
+```bash
+$ git clone https://github.com/stafwag/ansible-role-cloud_localds
+```
+
+and put into the [role search path](https://docs.ansible.com/ansible/2.4/playbooks_reuse_roles.html#role-search-path)
 
 ## Role tasks, tags, variables and templates
 
