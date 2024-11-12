@@ -39,7 +39,7 @@ If you want to use the source code directly.
 Clone the role source code.
 
 ```bash
-$ git clone https://github.com/stafwag/ansible-role-cloud_localds
+$ git clone https://github.com/stafwag/ansible-role-cloud_localds stafwag.cloud_localds
 ```
 
 and put into the [role search path](https://docs.ansible.com/ansible/2.4/playbooks_reuse_roles.html#role-search-path)
