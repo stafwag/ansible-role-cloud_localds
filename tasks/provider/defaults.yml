@@ -1,4 +1,4 @@
 ---
 - name: Unsupported provider
   ansible.builtin.fail:
-    msg: "ERROR: Sorry, the provider {{ _provider }} isn't supported."
+    msg: "ERROR: Sorry, the provider '{{ _provider }}' isn't supported."
