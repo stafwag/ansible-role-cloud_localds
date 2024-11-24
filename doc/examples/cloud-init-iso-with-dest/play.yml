@@ -11,3 +11,4 @@
           config: "{{ lookup('file','files/tst_user-data.yml') }}"
           network_config: "{{ lookup('file','files/tst_netconfig.yml') }}"
           overwrite: yes
+          provider: xorriso
