@@ -117,3 +117,8 @@
     cloud_localds_result
   changed_when:
     cloud_localds_result.rc == 0
+
+- name: Unlink {{ _cloundinit_tempdir.path }}
+  ansible.builtin.file:
+    path: "{{ _cloundinit_tempdir.path }}"
+    state: absent
