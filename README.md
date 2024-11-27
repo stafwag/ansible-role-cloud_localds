@@ -10,14 +10,18 @@ This role is a wrapper around the ```cloud-localds``` command.
 ### Supported GNU/Linux Distributions
 
 It should work on most GNU/Linux distributions.
-```cloud-localds``` is required. ```cloud-localds``` was available on
-Centos/RedHat 7 but not on Redhat 8. You'll need to install it manually
-to use the role on Centos/RedHat 8.
+
+On Linux distributions that have the ```cloud-localds``` package available the ```cloud-localds``` command is used to create an iso image with the
+cloud-init configuration.
+
+On Distributions that don't provide the ```cloud-localds```, the ```xorriso``` command is used to create the iso image.
 
 * Archlinux
 * Debian
-* Centos 7
-* RedHat 7
+* Centos 7 ( cloud_localds provider )
+* Centos 8 & 9 ( xorriso provider )
+* RedHat 7 ( cloud_localds provider )
+* RedHat 8 & 9 ( xorriso provider )
 * Ubuntu
 
 ### Installation
@@ -76,6 +80,7 @@ and put into the [role search path](https://docs.ansible.com/ansible/2.4/playboo
   * **group**: gid default 0  The file group owner of the destination image 
   * **mode**:  mode default '0400'  The permissions of the destination image
   * **overwrite**: boolean default: false Overwrite destination iso if already exists.
+  * **provider**: cloud_localds|xorriso default: cloud_localds
 
 The role creates an iso disk image with the cloud-init configuration
 When  ```cloud_localds.dest``` is defined the following files are created:
