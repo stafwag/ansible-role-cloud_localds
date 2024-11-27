@@ -1,6 +1,6 @@
 ---
-- name: Debug whow _cloudinit_config_yml var 
-  debug:
+- name: Debug whow _cloudinit_config_yml var
+  ansible.builtin.debug:
     var:
       _cloudinit_config_yml
   tags:
@@ -11,7 +11,7 @@
   when: >
     ( cloud_localds.network_config is defined ) or
     ( cloud_localds.network_config_template is defined )
-  debug:
+  ansible.builtin.debug:
     var:
       _cloudinit_net_config_yml
   tags:
@@ -19,9 +19,9 @@
     - debug
 
 - name: Debug show _cloudinit_iso var
-  debug:
+  ansible.builtin.debug:
     var:
-     _cloudinit_iso
+      _cloudinit_iso
   tags:
     - never
     - debug
@@ -35,9 +35,12 @@
     _cloundinit_tempdir
 
 - name: Show _cloundinit_tempdir
-  debug:
+  ansible.builtin.debug:
     var:
       _cloundinit_tempdir
+  tags:
+    - never
+    - debug
 
 - name: Create meta-data
   ansible.builtin.template:
@@ -47,44 +50,43 @@
     group: "{{ cloud_localds.group | default('0') }}"
     mode: "{{ cloud_localds.mode | default('0400') }}"
 
-- name: Copy {{ _cloudinit_config_yml }} to user-data
+- name: Copy _cloudinit_config_yml to user-data. {{ _cloudinit_config_yml }}
   ansible.builtin.copy:
-    src: "{{ _cloudinit_config_yml }}" 
+    src: "{{ _cloudinit_config_yml }}"
     dest: "{{ _cloundinit_tempdir.path }}/user-data"
     owner: "{{ cloud_localds.owner | default('0') }}"
     group: "{{ cloud_localds.group | default('0') }}"
     mode: "{{ cloud_localds.mode | default('0400') }}"
     remote_src: true
 
-
-# xorriso -joliet on -compliance "iso_9660_level=3:deep_paths:long_paths:long_names" -blank as_needed  -outdev /tmp/boe.iso  -add meta-dat
-# xorriso -joliet on -compliance "iso_9660_level=3:deep_paths:long_paths:long_names" -outdev /tmp/boe.iso -blank as_needed -map user-data my_user-data -add meta-data  network-config user-data
-
 - name: Set cmd
   ansible.builtin.set_fact:
-    _cloud_localds_cmd:
-      "xorriso -joliet on -compliance 'iso_9660_level=3:deep_paths:long_paths:long_names' -outdev {{ _cloudinit_iso }} -blank as_needed -add meta-data user-data"
-    
+    _cloud_localds_cmd: >-
+      xorriso -joliet on
+      -compliance 'iso_9660_level=3:deep_paths:long_paths:long_names'
+      -outdev {{ _cloudinit_iso }}
+      -blank as_needed -add meta-data user-data
+
 - name: Add network-config to cmd
   when: >
     ( cloud_localds.network_config is defined ) or
     ( cloud_localds.network_config_template is defined )
   block:
-    - name: Copy {{ _cloudinit_net_config_yml }} to network-config 
+    - name: Copy _cloudinit_net_config_yml to network-config. {{ _cloudinit_net_config_yml }}
       ansible.builtin.copy:
-        src: "{{ _cloudinit_net_config_yml }}" 
+        src: "{{ _cloudinit_net_config_yml }}"
         dest: "{{ _cloundinit_tempdir.path }}/network-config"
         owner: "{{ cloud_localds.owner | default('0') }}"
         group: "{{ cloud_localds.group | default('0') }}"
         mode: "{{ cloud_localds.mode | default('0400') }}"
         remote_src: true
-    - name: Add network-config to {{ _cloud_localds_cmd }} 
+    - name: Add network-config to {{ _cloud_localds_cmd }}
       ansible.builtin.set_fact:
         _cloud_localds_cmd:
           "{{ _cloud_localds_cmd }} network-config"
 
-- name: Debug show _cloud_localds_cmd var 
-  debug:
+- name: Debug show _cloud_localds_cmd var
+  ansible.builtin.debug:
     var:
       _cloud_localds_cmd
   tags:
@@ -98,12 +100,12 @@
   when: >
     ( cloud_localds.network_config is defined ) or
     ( cloud_localds.network_config_template is defined )
-    
+
 - name: DEBUG show _cloud_localds_cmd
   ansible.builtin.debug:
     var:
       _cloud_localds_cmd
-  tags: 
+  tags:
     - never
     - debug
 

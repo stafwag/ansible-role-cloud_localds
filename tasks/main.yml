@@ -29,18 +29,18 @@
     - debug
 
 - name: Set _provider to cloud_localds.provider
-  ansible.builtin.set_fact: 
+  ansible.builtin.set_fact:
     _provider:
       "{{ cloud_localds.provider }}"
   when:
     - cloud_localds.provider is defined
-  
+
 - name: Set _provider to cloud_localds
-  ansible.builtin.set_fact: 
+  ansible.builtin.set_fact:
     _provider:
       cloud_localds
   when:
-    - _provider is not defined 
+    - _provider is not defined
 
 - name: Display the _provider
   ansible.builtin.debug:
