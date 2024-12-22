@@ -16,6 +16,10 @@ cloud-init configuration.
 
 On Distributions that don't provide the ```cloud-localds```, the ```xorriso``` command is used to create the iso image.
 
+On FreeBSD is the ```xorriso``` provider is used.
+
+The role is tested on the operating systems/distributions below.
+
 * Archlinux
 * Debian
 * Centos 7 ( cloud_localds provider )
@@ -23,6 +27,9 @@ On Distributions that don't provide the ```cloud-localds```, the ```xorriso``` c
 * RedHat 7 ( cloud_localds provider )
 * RedHat 8 & 9 ( xorriso provider )
 * Ubuntu
+* FreeBSD (xorriso provider)
+
+If your operating system is not listed you can install ```cloud-localds``` or ```xorriso``` manually and set the ```provider``` variable.
 
 ### Installation
 
