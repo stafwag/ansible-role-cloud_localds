@@ -1,0 +1,30 @@
+---
+# Create the command
+- name: Set cmd
+  ansible.builtin.set_fact:
+    _cloud_localds_cmd:
+      "cloud-localds {{ _cloudinit_iso }} {{ _cloudinit_config_yml }}"
+
+- name: Add network-config to cmd
+  ansible.builtin.set_fact:
+    _cloud_localds_cmd:
+      "{{ _cloud_localds_cmd }} --network-config {{ _cloudinit_net_config_yml }}"
+  when: >
+    ( cloud_localds.network_config is defined ) or
+    ( cloud_localds.network_config_template is defined )
+
+- name: DEBUG show _cloud_localds_cmd
+  ansible.builtin.debug:
+    var:
+      _cloud_localds_cmd
+  tags:
+    - never
+    - debug
+
+- name: Run cloud-localds
+  ansible.builtin.command:
+    "{{ _cloud_localds_cmd }}"
+  register:
+    cloud_localds_result
+  changed_when:
+    cloud_localds_result.rc == 0

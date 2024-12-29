@@ -1,6 +1,6 @@
 ---
 - name: Create config.iso
-  gather_facts: no 
+  gather_facts: true 
   become: true
   hosts: localhost
   roles:

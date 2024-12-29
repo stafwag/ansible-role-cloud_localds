@@ -1,6 +1,6 @@
 ---
 - name: Create config.iso
-  gather_facts: no 
+  gather_facts: true 
   become: true
   hosts: localhost
   roles:
@@ -11,3 +11,5 @@
           config: "{{ lookup('file','files/tst_user-data.yml') }}"
           network_config: "{{ lookup('file','files/tst_netconfig.yml') }}"
           overwrite: yes
+#          provider: xorriso
+#          provider: cloud_localds

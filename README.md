@@ -5,20 +5,55 @@ This role is a wrapper around the ```cloud-localds``` command.
 
 ## Requirements
 
-cloud-localds
+```cloud-localds```
 
 ### Supported GNU/Linux Distributions
 
 It should work on most GNU/Linux distributions.
-```cloud-localds``` is required. ```cloud-localds``` was available on
-Centos/RedHat 7 but not on Redhat 8. You'll need to install it manually
-to use the role on Centos/RedHat 8.
+
+On Linux distributions that have the ```cloud-localds``` package available the ```cloud-localds``` command is used to create an iso image with the
+cloud-init configuration.
+
+On Distributions that don't provide the ```cloud-localds```, the ```xorriso``` command is used to create the iso image.
+
+On FreeBSD is the ```xorriso``` provider is used.
+
+The role is tested on the operating systems/distributions below.
 
 * Archlinux
 * Debian
-* Centos 7
-* RedHat 7
+* Centos 7 ( cloud_localds provider )
+* Centos 8 & 9 ( xorriso provider )
+* RedHat 7 ( cloud_localds provider )
+* RedHat 8 & 9 ( xorriso provider )
 * Ubuntu
+* FreeBSD (xorriso provider)
+
+If your operating system is not listed you can install ```cloud-localds``` or ```xorriso``` manually and set the ```provider``` variable.
+
+## Installation
+
+### Ansible galaxy
+
+The role is available on [Ansible Galaxy](https://galaxy.ansible.com/ui/standalone/roles/stafwag/cloud_localds/).
+
+To install the role from Ansible Galaxy execute the command below.
+
+```bash
+$ ansible-galaxy role install stafwag.cloud_localds
+```
+
+### Source Code
+
+If you want to use the source code directly.
+
+Clone the role source code.
+
+```bash
+$ git clone https://github.com/stafwag/ansible-role-cloud_localds stafwag.cloud_localds
+```
+
+and put it into the [role search path](https://docs.ansible.com/ansible/2.4/playbooks_reuse_roles.html#role-search-path)
 
 ## Role tasks, tags, variables and templates
 
@@ -52,6 +87,7 @@ to use the role on Centos/RedHat 8.
   * **group**: gid default 0  The file group owner of the destination image 
   * **mode**:  mode default '0400'  The permissions of the destination image
   * **overwrite**: boolean default: false Overwrite destination iso if already exists.
+  * **provider**: cloud_localds|xorriso default: cloud_localds
 
 The role creates an iso disk image with the cloud-init configuration
 When  ```cloud_localds.dest``` is defined the following files are created:
@@ -81,13 +117,15 @@ defined. In this case, the following files will be created:
   tasks:
     - name: Install the requirements
       include_role:
-        name: "{{ item }}"
+        name: "{{ _role }}"
         tasks_from:
           install
       with_items:
         - stafwag.libvirt 
         - stafwag.qemu_img
         - stafwag.cloud_localds
+      loop_control:
+        loop_var: _role
       tags:
         - install
 ```
