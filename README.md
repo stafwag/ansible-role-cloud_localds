@@ -31,9 +31,9 @@ The role is tested on the operating systems/distributions below.
 
 If your operating system is not listed you can install ```cloud-localds``` or ```xorriso``` manually and set the ```provider``` variable.
 
-### Installation
+## Installation
 
-#### Ansible galaxy
+### Ansible galaxy
 
 The role is available on [Ansible Galaxy](https://galaxy.ansible.com/ui/standalone/roles/stafwag/cloud_localds/).
 
@@ -43,7 +43,7 @@ To install the role from Ansible Galaxy execute the command below.
 $ ansible-galaxy role install stafwag.cloud_localds
 ```
 
-## Source Code
+### Source Code
 
 If you want to use the source code directly.
 
@@ -53,7 +53,7 @@ Clone the role source code.
 $ git clone https://github.com/stafwag/ansible-role-cloud_localds stafwag.cloud_localds
 ```
 
-and put into the [role search path](https://docs.ansible.com/ansible/2.4/playbooks_reuse_roles.html#role-search-path)
+and put it into the [role search path](https://docs.ansible.com/ansible/2.4/playbooks_reuse_roles.html#role-search-path)
 
 ## Role tasks, tags, variables and templates
 
