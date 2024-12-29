@@ -6,10 +6,12 @@
   tasks:
     - name: Install the requirements
       include_role:
-        name: "{{ item }}"
+        name: "{{ _role }}"
         tasks_from:
           install
       with_items:
         - stafwag.cloud_localds
+      loop_control:
+        loop_var: _role
       tags:
         - install

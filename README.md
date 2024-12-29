@@ -117,13 +117,15 @@ defined. In this case, the following files will be created:
   tasks:
     - name: Install the requirements
       include_role:
-        name: "{{ item }}"
+        name: "{{ _role }}"
         tasks_from:
           install
       with_items:
         - stafwag.libvirt 
         - stafwag.qemu_img
         - stafwag.cloud_localds
+      loop_control:
+        loop_var: _role
       tags:
         - install
 ```
