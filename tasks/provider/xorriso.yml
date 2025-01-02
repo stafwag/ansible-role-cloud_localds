@@ -62,7 +62,9 @@
 - name: Set cmd
   ansible.builtin.set_fact:
     _cloud_localds_cmd: >-
-      xorriso -joliet on
+      xorriso
+      -volid CIDATA
+      -joliet on -rockridge on
       -compliance 'iso_9660_level=3:deep_paths:long_paths:long_names'
       -outdev {{ _cloudinit_iso }}
       -blank as_needed -add meta-data user-data
