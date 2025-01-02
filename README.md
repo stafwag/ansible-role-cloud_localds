@@ -26,6 +26,7 @@ The role is tested on the operating systems/distributions below.
 * Centos 8 & 9 ( xorriso provider )
 * RedHat 7 ( cloud_localds provider )
 * RedHat 8 & 9 ( xorriso provider )
+* Suse ( xorriso provider )
 * Ubuntu
 * FreeBSD (xorriso provider)
 
