@@ -7,8 +7,16 @@
     - never
     - debug
 
+- name: Load vars
+  ansible.builtin.include_tasks: load_vars.yml
+
 - name: Install the cloud image util package
   ansible.builtin.include_tasks: install.yml
+  run_once: true
+  args:
+    apply:
+      tags:
+        - install
   tags:
     - install
 
