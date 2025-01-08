@@ -1,4 +1,9 @@
 ---
+- name: Load vars (Install)
+  ansible.builtin.include_tasks: load_vars.yml
+  when:
+    - _pkg is undefined
+
 - name: Install packages
   ansible.builtin.package:
     name: "{{ _pkg }}"

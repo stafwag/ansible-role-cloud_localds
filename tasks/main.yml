@@ -1,14 +1,4 @@
 ---
-- name: Set OS related variables
-  ansible.builtin.include_vars: "{{ _vars }}"
-  with_first_found:
-    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-    - "defaults.yml"
-  loop_control:
-    loop_var: _vars
-
 - name: Display the cloud_localds variable
   ansible.builtin.debug:
     var:
@@ -16,6 +6,9 @@
   tags:
     - never
     - debug
+
+- name: Load vars
+  ansible.builtin.include_tasks: load_vars.yml
 
 - name: Install the cloud image util package
   ansible.builtin.include_tasks: install.yml
